@@ -5,14 +5,14 @@ schemaVersion = "0.0.1"
 repository = "https://thunderstore.io"
 
 [package]
-namespace = "TODO: Fill in your Thunderstore team name here"
+namespace = "darmuh"
 name = "PlayerCount"
 description = "Modify the player lobby limit to up to 20 players (or down to 2!)"
-websiteUrl = ""
+websiteUrl = "https://github.com/darmuh/YAPYAP_PlayerCount"
 containsNsfwContent = false
 
 [package.dependencies]
-BepInEx-BepInExPack = "5.4.2403"
+BepInEx-BepInExPack = "5.4.2304"
 
 [build]
 icon = "../../icon.png"

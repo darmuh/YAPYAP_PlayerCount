@@ -4,3 +4,4 @@
 
 - This is an incredibly simple mod that just modifies the lobby player limit from the default.
 - The limit is fully configurable and can both increase the limit up to 20 players or decrease the limit down to 2 players.
+- Use at your own risk and remember that increasing this player limit has the potential to introduce unintended bugs.
