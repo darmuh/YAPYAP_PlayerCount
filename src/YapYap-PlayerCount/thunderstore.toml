@@ -20,7 +20,7 @@ readme = "../../README.md"
 outdir = "../../artifacts/thunderstore/"
 
 [[build.copy]]
-source = "../../artifacts/bin/YapYap_PlayerCount/release/com.github.darmuh.PlayerCount.dll"
+source = "../../artifacts/bin/YapYap-PlayerCount/release/com.github.darmuh.PlayerCount.dll"
 target = "plugins/"
 
 [[build.copy]]
