@@ -7,7 +7,7 @@ repository = "https://thunderstore.io"
 [package]
 namespace = "darmuh"
 name = "PlayerCount"
-description = "Modify the player lobby limit to up to 20 players (or down to 2!)"
+description = "Host only mod that allows for modifying the player lobby limit up to 20 players (or down to 2!)"
 websiteUrl = "https://github.com/darmuh/YAPYAP_PlayerCount"
 containsNsfwContent = false
 
@@ -42,4 +42,4 @@ communities = [ "yapyap", ]
 [publish.categories]
 # See categories at:
 # https://thunderstore.io/api/experimental/community/yapyap/category/
-yapyap = [ "mods", ]
+yapyap = [ "mods", "qol", "host", ]
