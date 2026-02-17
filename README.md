@@ -9,6 +9,13 @@
 ### Configuration Options
 
  - ``Max Players`` Set desired maximum number of players
+ - ``Toggle UI Hint`` When host of a lobby, this key can be used to toggle the in-game UI hint off/on (top left)
+
+### In-game configuration
+ - As of 0.2.0, there is now an in-game setting located in Settings -> General labeled ``MAX PLAYERS``  
+	- This setting can be changed at any time. However, for the value change to take affect you will need to host a new lobby.  
+ - If [YapLocalizer](https://thunderstore.io/c/yapyap/p/darmuh/YapLocalizer/) is present, the Max Players setting will have added localizations.
+	- If a localization does not exist for your language or could be improved please let me know!
 
 ### Quota Scaling by Player Count (QuotaQueen by Robyn)  
  - If you have [QuotaQueen](https://thunderstore.io/c/yapyap/p/Robyn/QuotaQueen/) installed, this mod will add two Quota Stratgey configuration options to QuotaQueen's configuration.    

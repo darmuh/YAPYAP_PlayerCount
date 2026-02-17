@@ -11,10 +11,8 @@ public static class QuotaQueenUsage
     [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
     public static void AddQuotaStrategies()
     {
-#pragma warning disable IDE0090 // Use 'new(...)' suppressed to fix soft compatibility
-        Func<GameSnapshot, int> scaleUp = new Func<GameSnapshot, int>(ScaleQuotaUp);
-        Func<GameSnapshot, int> scaleAlways = new Func<GameSnapshot, int>(ScaleQuota);
-#pragma warning restore IDE0090 // Use 'new(...)'
+        Func<GameSnapshot, int> scaleUp = new(ScaleQuotaUp);
+        Func<GameSnapshot, int> scaleAlways = new(ScaleQuota);
         QuotaStrategyManager.RegisterStrategy("darmuh.PlayerCount", "ScaleUp", scaleUp);
         QuotaStrategyManager.RegisterStrategy("darmuh.PlayerCount", "ScaleAlways", scaleAlways);
     }

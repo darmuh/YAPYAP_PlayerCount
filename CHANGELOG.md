@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.0
+ - Injected mod config setting into settings menu for changing it in-game
+	- Added soft dependency to YapLocalizer to add localizations for this setting.
+ - Added toggle-able UI indicator of the current lobby's maximum players per request.
+	- Keybind to show/hide this is configurable.
+	- Non-host players will not see this text ever, since they dont have access to the information as clients.
+ - Updated readme to include the new stuff
+
 ## 0.1.2
  - Updated to work with latest version of the game (Feb 10th, 2026)
  - Removed Quota Modifier setting in favor of Soft Compatibility with [QuotaQueen](https://thunderstore.io/c/yapyap/p/Robyn/QuotaQueen/)
