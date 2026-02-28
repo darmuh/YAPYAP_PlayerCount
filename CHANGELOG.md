@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.1
+ - Recompiled on latest version of the game.
+ - Updated toggle-able UI indicator to auto-hide when not in a lobby.
+ - Added new configuration item ``Spawn Extra Starter Wands``
+	- When enabled, will spawn extra starter wands in the lost and found box.
+	- The amount of extra wands to spawn is determined by how many extra slots your lobby has (in comparison to vanilla)
+	- So a lobby with 10 slots will spawn 4 extra starter wands in the lost and found (10 slots - 6 vanilla slots)
+	- Extra wands will only spawn in the lobby on the first night of a save.
+
 ## 0.2.0
  - Injected mod config setting into settings menu for changing it in-game
 	- Added soft dependency to YapLocalizer to add localizations for this setting.

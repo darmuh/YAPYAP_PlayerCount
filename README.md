@@ -10,6 +10,10 @@
 
  - ``Max Players`` Set desired maximum number of players
  - ``Toggle UI Hint`` When host of a lobby, this key can be used to toggle the in-game UI hint off/on (top left)
+ - ``Spawn Extra Starter Wands`` When enabled, will spawn extra starter wands in the lost and found box.
+	- The amount of extra wands to spawn is determined by how many extra slots your lobby has (in comparison to vanilla)  
+	- So a lobby with 10 slots will spawn 4 extra starter wands in the lost and found box (10 slots - 6 vanilla slots)  
+	- **Extra wands will only spawn in the lobby on the first night of a save.**  
 
 ### In-game configuration
  - As of 0.2.0, there is now an in-game setting located in Settings -> General labeled ``MAX PLAYERS``  

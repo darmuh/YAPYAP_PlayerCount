@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System.Reflection;
 using BepInEx;
 using BepInEx.Bootstrap;
 using BepInEx.Configuration;
@@ -21,6 +22,7 @@ public partial class Plugin : BaseUnityPlugin
     internal static ManualLogSource Log { get; private set; } = null!;
     internal static ConfigEntry<int> MaxPlayers { get; private set; } = null!;
     internal static ConfigEntry<KeyCode> UIHintToggle { get; private set; } = null!;
+    internal static ConfigEntry<bool> FindExtraWands { get; private set; } = null!;
     private static System.Version MinimumQueenVer = new("0.3.0");
     internal static bool QuotaQueenExists
     {
@@ -48,11 +50,30 @@ public partial class Plugin : BaseUnityPlugin
     {
         Log = Logger;
 
-        Log.LogMessage($"Plugin {Name} is loaded!");
+        Log.LogMessage($"Plugin {Name} is loaded with version {Version}!");
         MaxPlayers = Config.Bind("Settings", "Max Players", 10, new ConfigDescription("Set your desired maximum number of players here!", new AcceptableValueRange<int>(2, 20)));
         UIHintToggle = Config.Bind("Settings", "Toggle UI Hint", KeyCode.Tab, "Set key used to toggle UI hint displaying the lobby's maximum players");
+        FindExtraWands = Config.Bind("Settings", "Spawn Extra Starter Wands", true, "When enabled, will spawn extra starter wands in the lost and found when starting a new save.\nThe amount of extra starter wands is determined by the amount of extra player slots in your lobby");
+
         Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
         Log.LogMessage($"Max players set to {MaxPlayers.Value}");
+
+        GameManager.OnGameStateChangedAction += () =>
+        {
+            //Host does not want to spawn extra wands
+            if (!FindExtraWands.Value)
+                return;
+
+            //not currently hosting a lobby
+            if (!NetworkServer.active)
+                return;
+
+            //only spawn extra wands when loading a fresh lobby
+            if (GameManager.Instance.quotaSessionsCompleted != 0 || GameManager.Instance.currentRound != 0 || GameManager.Instance.currentGameState != GameManager.GameState.Lobby)
+                return;
+
+            SpawnExtraWands();
+        };
     }
 
     private void Start()
@@ -84,7 +105,17 @@ public partial class Plugin : BaseUnityPlugin
         if (UIPlayerCount == null)
             return;
 
+        //disable max player count for non-host clients
         if (!NetworkServer.active && NetworkClient.active)
+        {
+            if (UIPlayerCount.activeSelf)
+                UIPlayerCount.SetActive(false);
+
+            return;
+        }
+
+        //disable max player count outside lobby
+        if (GameManager.Instance.currentGameState != GameManager.GameState.Lobby)
         {
             if (UIPlayerCount.activeSelf)
                 UIPlayerCount.SetActive(false);
@@ -102,6 +133,20 @@ public partial class Plugin : BaseUnityPlugin
         //check/update text value if object is visible
         if(!UIPlayerCount.GetComponent<TMP_Text>().text.Contains($"{NetworkServer.maxConnections}"))
             UIPlayerCount.GetComponent<TMP_Text>().text = $"Lobby Max Players: {NetworkServer.maxConnections}";
+    }
+
+    private static void SpawnExtraWands()
+    {
+        int extras = NetworkServer.maxConnections - 6;
+        NetworkIdentity prefab = GameManager.Instance.lostItemsTracker.blacklistedProps[0];
+        Vector3 position = GameManager.Instance.lostItemsTracker.droppedItemsSpawnPosition.position;
+
+        Log.LogDebug($"Spawning [ {extras} ] extra wands!");
+        for(int i = 0; i < extras; i++)
+        {
+            GameManager.SpawnNetworkPrefab(prefab, position, Quaternion.identity);
+        }
+        
     }
 
     [HarmonyPatch(typeof(YapFsm), nameof(YapFsm.Initialise))]
@@ -128,6 +173,7 @@ public partial class Plugin : BaseUnityPlugin
         public static void Prefix(UIGame __instance)
         {
             UIPlayerCount = GameObject.Instantiate(__instance.gameInfoText.gameObject, __instance.gameInfoText.gameObject.transform.parent);
+            UIPlayerCount.name = "PlayerCount Mod MaxPlayers UI Hint Label";
             UIPlayerCount.transform.localPosition = new(-1025f, 35f, 0f);
             UIPlayerCount.GetComponent<TMP_Text>().text = $"Lobby Max Players: {NetworkServer.maxConnections}";
         }
@@ -142,7 +188,7 @@ public partial class Plugin : BaseUnityPlugin
             var parent = fovSetting.transform.parent;
 
             GameObject PlayerCountSetting = GameObject.Instantiate(fovSetting, parent);
-            PlayerCountSetting.name = "PlayerCount MaxPlayers";
+            PlayerCountSetting.name = "PlayerCount MaxPlayers Setting";
             var title = PlayerCountSetting.transform.Find("Title");
             if(YapalizerExists)
                 title.GetComponent<LocalisedTMP>()._key = MaxPlayersKey;
